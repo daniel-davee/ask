@@ -5,7 +5,7 @@ from PyInquirer import prompt
 from yaml import dump,load, FullLoader
 from pathlib import Path
 from enum import Enum
-from magic_toolbox.magic_dict.magic_dict import Magic_dict
+from magic_dict.magic_dict import Magic_dict
 
 class Questions_Types(Enum):
     List = 'list'
@@ -129,6 +129,13 @@ types = [qt.Input, qt.List,qt.Input]
 names = ['message', 'type', 'name']
 
 what_to_ask = Answers([Question(*mtn) for mtn in zip(messages,types,names)])
+
+
+def yes_or_no(question:str, answer:bool=None, debug_mode:bool=True):
+    if answer != None or debug_mode:
+        return ' '.join([question,('yes' if answer else 'no')])
+    question = Question(question, qt.Confirm,'yes_or_no',choices=['yes', 'no'])
+    return Answers([question]).answer()
 
 def ask(answers:('answer yaml file','optional','a') = ''):
     "Ask Questions"

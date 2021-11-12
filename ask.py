@@ -5,7 +5,7 @@ from PyInquirer import prompt
 from yaml import dump,load, FullLoader
 from pathlib import Path
 from enum import Enum
-from magic_dict.magic_dict import Magic_dict
+from tool_box.magic_dict.magic_dict import Magic_dict
 
 class Questions_Types(Enum):
     List = 'list'

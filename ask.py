@@ -7,7 +7,7 @@ from pathlib import Path
 from enum import Enum
 from tool_box.magic_dict.magic_dict import Magic_dict
 
-class Questions_Types(Enum):
+class Questions_Type(Enum):
     List = 'list'
     Raw_List = 'rawlist'
     Expand = 'expand'
@@ -17,7 +17,7 @@ class Questions_Types(Enum):
     Password = 'password'
     Editor = 'editor'
 
-qt = Questions_Types
+qt = Questions_Type
 
 class Choices(Magic_dict):
     
@@ -25,8 +25,9 @@ class Choices(Magic_dict):
     
     should_be_dict = {qt.Expand, qt.CheckBox}
     
-    def __init__(self,question_type:Questions_Types,
-                 choices:Iterable or Callable):
+    def __init__(self,question_type:Questions_Type,
+                 choices:Iterable):
+        super().__init__(choices)
         self.question_type = question_type
         self['choices'] = choices
         self._assert(self.validate())
@@ -34,7 +35,7 @@ class Choices(Magic_dict):
     def validate(self):
         if self.question_type in self.should_be_dict:
             assert isinstance(self.choices,Dict)
-            if self.question_type is qt.expandtabs(): 
+            if self.question_type is qt.Expand: 
                 self.assert_('key' in self.choices, 'key not in choices')
         return True
  
@@ -50,7 +51,7 @@ class Question(Magic_dict):
                      qt.Expand, qt.CheckBox, qt.Confirm}
     
     def __init__(self, message: str, 
-                 _type: Questions_Types, 
+                 _type: Questions_Type, 
                  name: str,
                  choices: Iterable=[],
                  default: Any = None,
@@ -130,12 +131,6 @@ names = ['message', 'type', 'name']
 
 what_to_ask = Answers([Question(*mtn) for mtn in zip(messages,types,names)])
 
-
-def yes_or_no(question:str, answer:bool=None, debug_mode:bool=True):
-    if answer != None or debug_mode:
-        return ' '.join([question,('yes' if answer else 'no')])
-    question = Question(question, qt.Confirm,'yes_or_no',choices=['yes', 'no'])
-    return Answers([question]).answer()
 
 def ask(answers:('answer yaml file','optional','a') = ''):
     "Ask Questions"

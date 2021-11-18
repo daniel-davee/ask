@@ -5,8 +5,8 @@ from PyInquirer import prompt
 from yaml import dump,load, FullLoader
 from pathlib import Path
 from enum import Enum
-from tool_box.magic_dict.magic_dict import Magic_dict
-
+from magic_dict.magic_dict import Magic_dict
+from yes_or_no.yes_or_no import yes_or_no
 class Questions_Type(Enum):
     List = 'list'
     Raw_List = 'rawlist'
